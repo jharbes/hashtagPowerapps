@@ -1,0 +1,23 @@
+Atualiza lista de sharepoint de dentro do aplicativo PowerApps:
+
+Patch(listaTeste,Defaults(listaTeste),
+{
+    Nome: txtNome.Text,
+    Cargo: txtCargo.Text,
+    Salario: Value(txtSalario.Text)
+})
+
+
+
+Atualiza lista de sharepoint de dentro do aplicativo PowerApps, com mensagem de sucesso no final:
+
+Patch(listaTeste,Defaults(listaTeste),
+{
+    Nome: txtNome.Text,
+    Cargo: txtCargo.Text,
+    Salario: Value(txtSalario.Text)
+});
+
+Notify("Funcionário cadastrado com sucesso!")
+
+
