@@ -1,3 +1,13 @@
+Nome do usuario:
+
+User().FullName
+
+
+Mudar de tela:
+
+Navigate(nome_da_tela)
+
+
 Atualiza lista de sharepoint de dentro do aplicativo PowerApps:
 
 Patch(listaTeste,Defaults(listaTeste),
