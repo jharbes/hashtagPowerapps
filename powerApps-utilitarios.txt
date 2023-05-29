@@ -19,8 +19,8 @@ Patch(listaTeste,Defaults(listaTeste),
 
 
 
-Atualiza lista de sharepoint de dentro do aplicativo PowerApps, com mensagem de sucesso no final,
-também funciona como criação de linha (novo item) com a mesma sintaxe:
+Cria linha na lista de sharepoint de dentro do aplicativo PowerApps, com mensagem de sucesso no final,
+funciona como criação de linha (novo item):
 
 Patch(listaTeste,Defaults(listaTeste),
 {
