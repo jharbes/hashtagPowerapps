@@ -32,3 +32,25 @@ Patch(listaTeste,Defaults(listaTeste),
 Notify("Funcionário cadastrado com sucesso!")
 
 
+
+
+Patch(vistoria, Defaults(vistoria),
+{
+    placa: Dropdown1.Selected.placa,
+    eletrica: toggle_eletrica.Value,
+    iluminacao: toggle_iluminacao.Value,
+    motor: toggle_motor.Value,
+    freio: toggle_freio.Value,
+    pneu: toggle_pneus.Value,
+    observacao: txt_observacoes.Text
+});
+
+Patch(veiculo, LookUp(veiculo, placa = Dropdown1.Selected.placa), 
+{
+    status: If(toggle_eletrica.Value && toggle_iluminacao.Value && toggle_motor.Value && toggle_freio.Value && toggle_pneus.Value, "Apto", "Não Apto")
+});
+
+Notify("Vistoria adicionada com sucesso!")
+
+
+
