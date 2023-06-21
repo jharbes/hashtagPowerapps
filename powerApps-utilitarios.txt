@@ -3,9 +3,16 @@ Nome do usuario:
 User().FullName
 
 
+---------------------------------------------------------------------------
+
+
+
 Mudar de tela:
 
 Navigate(nome_da_tela)
+
+
+---------------------------------------------------------------------------
 
 
 Atualiza lista de sharepoint de dentro do aplicativo PowerApps:
@@ -17,6 +24,8 @@ Patch(listaTeste,Defaults(listaTeste),
     Salario: Value(txtSalario.Text)
 })
 
+
+---------------------------------------------------------------------------
 
 
 Cria linha na lista de sharepoint de dentro do aplicativo PowerApps, com mensagem de sucesso no final,
@@ -32,6 +41,7 @@ Patch(listaTeste,Defaults(listaTeste),
 Notify("Funcionário cadastrado com sucesso!")
 
 
+---------------------------------------------------------------------------
 
 
 Patch(vistoria, Defaults(vistoria),
