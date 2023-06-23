@@ -78,4 +78,24 @@ Notify("Produto cadastrado com sucesso!");
 Reset(TextInput2);
 
 
+-----------------------------------------------------------------------------
+
+
+MOSTRANDO E RECOLHENDO POP-UP
+
+
+NO VISIBLE DO CONTAINER POP-UP:
+
+Container1.Visible=var_produto_selecionado
+
+
+NO BOTAO QUE DEVE ABRIR O POP-UP:
+
+UpdateContext({var_produto_selecionado: true})
+
+
+NO BOTAO QUE DEVE FECHAR O POP-UP:
+
+UpdateContext({var_produto_selecionado: false})
+
 
