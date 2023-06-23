@@ -63,4 +63,19 @@ Patch(veiculo, LookUp(veiculo, placa = Dropdown1.Selected.placa),
 Notify("Vistoria adicionada com sucesso!")
 
 
+---------------------------------------------------------------------------
+
+
+Patch(produtos, Defaults(produtos),
+{
+    nome: TextInput2.Text,
+    foto: Camera1.Photo,
+    quantidade_estoque: 0
+});
+
+Notify("Produto cadastrado com sucesso!");
+
+Reset(TextInput2);
+
+
 
