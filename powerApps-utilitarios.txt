@@ -27,6 +27,19 @@ Patch(listaTeste,Defaults(listaTeste),
 
 ---------------------------------------------------------------------------
 
+adicionar em data o connector de email Office365Outlook
+
+
+Office365Outlook.SendEmailV2(
+    
+        txtResponsavel.Text,
+        "Problema reportado a respeito do produto" & Dropdown2.Selected.nome,
+        txtDescricao.Text
+    
+);
+
+---------------------------------------------------------------------------
+
 
 Cria linha na lista de sharepoint de dentro do aplicativo PowerApps, com mensagem de sucesso no final,
 funciona como criação de linha (novo item):
