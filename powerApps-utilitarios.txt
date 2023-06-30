@@ -38,6 +38,11 @@ Office365Outlook.SendEmailV2(
     
 );
 
+
+
+Rich text messages
+https://www.matthewdevaney.com/power-apps-send-email-using-outlook-the-complete-guide/#Email-Rich-Text-Messages
+
 ---------------------------------------------------------------------------
 
 
