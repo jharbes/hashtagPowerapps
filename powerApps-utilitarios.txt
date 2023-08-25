@@ -2,6 +2,11 @@ Nome do usuario:
 
 User().FullName
 
+Imagem do Usuario:
+
+User().Image
+
+
 
 ---------------------------------------------------------------------------
 
