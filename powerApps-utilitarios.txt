@@ -17,7 +17,7 @@ Mudar de tela:
 Navigate(nome_da_tela)
 
 
----------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------
 
 
 Atualiza lista de sharepoint de dentro do aplicativo PowerApps:
@@ -39,6 +39,28 @@ Insert -> Edit Form -> Conectar o Form ao banco de dados (tabela) necessário e 
 Criar um botão para submit que deve ter o comando no OnSelect: SubmitForm(Form1)  (onde Form1 é o nome do formulário)
 
 Criar um botão (ou ícone de +) para que seja adicionado novos itens na tabela e preencher no OnSelect -> NewForm(Form1)
+
+
+--------------------------------------------------------------------------------------------------------------
+
+Para carregar os itens existentes da tabela do sharepoint no formulário Edit Form faremos o seguinte:
+
+Dentro do formulário (selecionamos ele) procuramos pela propriedade 'Item' no menu dropdown que fica no canto Superior a esquerda
+
+Preenchemos com Gallery1.Selected	(onde Gallery1 é o nome da galeria onde estão os itens da lista desejada)
+
+
+
+Devemos colocar o formulário com o modo padrão para novo , para que seu default seja incluir novos funcionários e não editar os existentes
+
+Para isso selecionamos o formulário, vamos nas opções da aba a Direita -> 'Properties' -> 'Default Mode' -> 'New'
+
+Depois disso temos que fazer uma alteração para que possamos editar os dados dos funcionários:
+
+Clicamos em um dos itens da lista -> Opção 'OnSelect' no menu dropdown superior a esquerda -> preencher: Select(Parent);EditForm(Form1)
+
+No botão de submit do formulário também devemos atualizar para que sempre que for clicado para salvar algo volte ao estado inicial em branco de NewForm, para isso preenchemos na Opção 'OnSelect' no menu dropdown superior a esquerda -> SubmitForm(Form1);NewForm(Form1)
+--------------------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------
 
