@@ -154,3 +154,14 @@ NO BOTAO QUE DEVE FECHAR O POP-UP:
 UpdateContext({var_produto_selecionado: false})
 
 
+-----------------------------------------------------------------------------
+
+ADICIONANDO BING MAPAS:
+
+Ir em Menu Superior -> 'Add Data/Adicionar Dados' -> 'Bing Maps/Bing Mapas' -> 'Add a connection' -> Preencher o campo 'API Key/Chave de API'
+
+Para encontrar a chave do API ir no google e pesquisar bing mapas api key -> 'Bing Maps Dev Center' -> 'Sign In'
+
+Já feito o login ir na opção do Menu Superior -> 'My account' -> 'My keys' -> 'Create a new Key'
+
+Pegar a chave criada e colar no 'API Key' do PowerApps
