@@ -165,3 +165,81 @@ Para encontrar a chave do API ir no google e pesquisar bing mapas api key -> 'Bi
 Já feito o login ir na opção do Menu Superior -> 'My account' -> 'My keys' -> 'Create a new Key'
 
 Pegar a chave criada e colar no 'API Key' do PowerApps
+
+
+TRANSFORMANDO O ENDEREÇO:
+
+Antes de dar submit no formulario 'SubmitForm(equip_form)' no campo 'OnSelect' incluiremos um comando do Bing Mapas para converter o endereço na longitude e latitude:
+
+Set(var_endereco,
+	BingMaps.GetLocationByAddress(
+	{
+    	adressLine: 'endereco.txt'.Text & " " & 'endereco_numero.txt'.Text, // endereco
+    	locality:"", // cidade
+    	adminDistrict:"", // UF 
+    	postalCode: 'cep.txt'.Text, // cep
+    	countryRegion: "BRA" // pais
+	})
+);
+
+
+Set(
+    LocationResult,
+    BingMaps.GetLocationByAddress(
+        {
+            addressLine: "1600 Amphitheatre Parkway",
+            locality: "Mountain View",
+            postalCode: "94043",
+            region: "CA",
+            countryRegion: "US"
+        }
+    )
+);
+
+
+
+Patch(equipament_app_vistoria,Defaults(equipament_app_vistoria),{
+    modelo:'modelo.txt'.Text,
+    tipo_equipamento:'tipo_equipamento.txt'.Text,
+    marca:'marca.txt'.Text,
+    serial_number:'serial_number.txt'.Text,
+    endereco:'endereco.txt'.Text,
+    endereco_numero:'endereco_numero.txt'.Text,
+    cidade:"",
+    estado:"",
+    cep:'cep.txt'.Text,
+    longitude:var_endereco.point.coordinates.longitude,
+    latitude:var_endereco.point.coordinates.latitude
+});
+
+ResetForm(equip_form);
+
+NewForm(equip_form)
+
+
+ADICIONANDO A IMAGEM:
+
+Ir no Menu Superior -> 'Insert' -> 'Image'
+
+na linha de comandos opção 'Image' da imagem preencher com o comando:
+
+BingMaps.GetMapV2(
+	"AerialWithLabels", // tipo de mapa
+	18, // zoom
+	gallery_equipment.Selected.latitude, // latitude
+	gallery_equipment.Selected.longitude // longitude
+)
+
+
+Incluindo slider para alterar o zoom:
+
+Incluir o slider (Menu Superior -> 'Input' -> 'Slider') na tela atual proximo à imagem do Bing
+
+Voltar na opção 'Image' da imagem para reeditar o comando e colocar assim:
+
+BingMaps.GetMapV2(
+	"AerialWithLabels", // tipo de mapa
+	slider_zoom.Value, // zoom
+	gallery_equipment.Selected.latitude, // latitude
+	gallery_equipment.Selected.longitude // longitude
+)
