@@ -235,6 +235,10 @@ Incluindo slider para alterar o zoom:
 
 Incluir o slider (Menu Superior -> 'Input' -> 'Slider') na tela atual proximo à imagem do Bing
 
+Ajustar o minimo e maximo do Slider entre 1 e 19, colocar o default value para 18
+
+Desmarcar a opção 'Exibir Valor'/'Show Value' , pois os numeros em si de 1 a 19 nao fazem sentido para o usuario
+
 Voltar na opção 'Image' da imagem para reeditar o comando e colocar assim:
 
 BingMaps.GetMapV2(
