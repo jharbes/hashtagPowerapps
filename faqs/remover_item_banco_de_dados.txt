@@ -1,0 +1,14 @@
+REMOVENDO ITEM DA LISTA SHAREPOINT
+
+
+Completar no 'OnSelect' do botão desejado:
+
+RemoveIf(collection,condition)
+
+ou 
+
+RemoveIf(lista do sharepoint, condicao)
+
+Exemplo:
+
+RemoveIf(equipament_app_vistoria,ID=gallery_equipment.Selected.ID)
