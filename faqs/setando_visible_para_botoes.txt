@@ -1,0 +1,46 @@
+Criamos uma variavel de acordo com o botão apertado (novo item, atualizar item) após o comando efetivo do OnSelect:
+
+Exemplo:
+
+Select(Parent);EditForm(equip_form);Set(var_modo_form,"editar")
+
+
+-----------------------------------------------------------------------------------------------------------------
+
+
+Selecionamos o botão em questão e vamos em sua propriedade 'Visible' no Menu Superior lado esquerdo, lá preencheremos da seguinte maneira:
+
+If(var_modo_form="editar",true,false)
+
+
+-----------------------------------------------------------------------------------------------------------------
+
+
+no fim de cada uma das transacoes é importante setar no OnSelect de cada um dos botoes a variável que controla o modo de formulário novamente para novo como no exemplo abaixo:
+
+Set(var_endereco, BingMaps.GetLocationByAddress({
+    adressLine: 'endereco.txt'.Text & " " & 'endereco_numero.txt'.Text, // endereco
+    locality:"", // cidade
+    adminDistrict:"", // UF 
+    postalCode: 'cep.txt'.Text, // cep
+    countryRegion: "BRA"})); // pais
+
+
+Patch(equipament_app_vistoria,Defaults(equipament_app_vistoria),{
+    modelo:'modelo.txt'.Text,
+    tipo_equipamento:'tipo_equipamento.txt'.Text,
+    marca:'marca.txt'.Text,
+    serial_number:'serial_number.txt'.Text,
+    endereco:'endereco.txt'.Text,
+    endereco_numero:'endereco_numero.txt'.Text,
+    cidade:"",
+    estado:"",
+    cep:'cep.txt'.Text,
+    longitude:var_endereco.point.coordinates.longitude,
+    latitude:var_endereco.point.coordinates.latitude
+});
+
+ResetForm(equip_form);
+NewForm(equip_form);
+Set(var_modo_form,"novo")
+
