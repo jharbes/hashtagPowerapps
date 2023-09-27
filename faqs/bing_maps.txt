@@ -117,6 +117,8 @@ IfError(
 
 // aqui incluimos o pushpin para que mostre um circulo no meio do mapa
 // mostrando o local exato do endereço no mapa
+// o pushpinIconStyle: pode ter diversas numerações onde cada uma sera um tipo de icone diferente para
+// mostrar a localizacao
 IfError(
     BingMaps.GetMapV2(
 	"AerialWithLabels", // tipo de mapa
@@ -126,7 +128,7 @@ IfError(
     {
         pushpinLatitude:gallery_equipment.Selected.latitude,
         pushpinLongitude:gallery_equipment.Selected.longitude,
-        pushpinIconStyle:1
+        pushpinIconStyle:66
     }
 ),
     "") 
