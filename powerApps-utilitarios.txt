@@ -247,3 +247,5 @@ BingMaps.GetMapV2(
 	gallery_equipment.Selected.latitude, // latitude
 	gallery_equipment.Selected.longitude // longitude
 )
+
+
