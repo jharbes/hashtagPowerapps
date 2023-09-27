@@ -9,6 +9,10 @@ Já feito o login ir na opção do Menu Superior -> 'My account' -> 'My keys' ->
 Pegar a chave criada e colar no 'API Key' do PowerApps
 
 
+-----------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------
+
+
 TRANSFORMANDO O ENDEREÇO:
 
 Antes de dar submit no formulario 'SubmitForm(equip_form)' no campo 'OnSelect' incluiremos um comando do Bing Mapas para converter o endereço na longitude e latitude:
@@ -59,6 +63,10 @@ ResetForm(equip_form);
 NewForm(equip_form)
 
 
+-----------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------
+
+
 ADICIONANDO A IMAGEM:
 
 Ir no Menu Superior -> 'Insert' -> 'Image'
@@ -72,6 +80,7 @@ BingMaps.GetMapV2(
 	gallery_equipment.Selected.longitude // longitude
 )
 
+-----------------------------------------------------------------------------------------------------------------
 
 Incluindo slider para alterar o zoom:
 
@@ -89,3 +98,39 @@ BingMaps.GetMapV2(
 	gallery_equipment.Selected.latitude, // latitude
 	gallery_equipment.Selected.longitude // longitude
 )
+
+-----------------------------------------------------------------------------------------------------------------
+
+IfError(
+    BingMaps.GetMapV2(
+	"AerialWithLabels", // tipo de mapa
+	slider_zoom.Value, // zoom
+	gallery_equipment.Selected.latitude, // latitude
+	gallery_equipment.Selected.longitude // longitude
+),
+    "") 
+// estamos incluindo o IfError para no caso de uma exclusão não apareça uma mensagem de erro pela falta
+// dos dados para renderizacao do mapa
+
+-----------------------------------------------------------------------------------------------------------------
+
+
+// aqui incluimos o pushpin para que mostre um circulo no meio do mapa
+// mostrando o local exato do endereço no mapa
+IfError(
+    BingMaps.GetMapV2(
+	"AerialWithLabels", // tipo de mapa
+	slider_zoom.Value, // zoom
+	gallery_equipment.Selected.latitude, // latitude
+	gallery_equipment.Selected.longitude, // longitude
+    {
+        pushpinLatitude:gallery_equipment.Selected.latitude,
+        pushpinLongitude:gallery_equipment.Selected.longitude,
+        pushpinIconStyle:1
+    }
+),
+    "") 
+
+
+
+
