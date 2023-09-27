@@ -1,0 +1,31 @@
+// ALTERANDO ITEM EM LISTA DO SHAREPOINT:
+
+// observe a mudança do Patch/LookUp em relação ao Patch/Defaults
+// no Patch/LookUp devemos passar como parametro, alem da lista em questão,
+// a condição do item a ser deletado
+
+
+Set(var_endereco, BingMaps.GetLocationByAddress({
+    adressLine: 'endereco.txt'.Text & " " & 'endereco_numero.txt'.Text, // endereco
+    locality:"", // cidade
+    adminDistrict:"", // UF 
+    postalCode: 'cep.txt'.Text, // cep
+    countryRegion: "BRA"})); // pais
+
+
+Patch(equipament_app_vistoria,LookUp(equipament_app_vistoria,ID=gallery_equipment.Selected.ID),{
+    modelo:'modelo.txt'.Text,
+    tipo_equipamento:'tipo_equipamento.txt'.Text,
+    marca:'marca.txt'.Text,
+    serial_number:'serial_number.txt'.Text,
+    endereco:'endereco.txt'.Text,
+    endereco_numero:'endereco_numero.txt'.Text,
+    cidade:"",
+    estado:"",
+    cep:'cep.txt'.Text,
+    longitude:var_endereco.point.coordinates.longitude,
+    latitude:var_endereco.point.coordinates.latitude
+});
+
+ResetForm(equip_form);
+NewForm(equip_form)
