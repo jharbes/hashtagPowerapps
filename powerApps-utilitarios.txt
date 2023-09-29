@@ -27,7 +27,11 @@ Patch(listaTeste,Defaults(listaTeste),
     Nome: txtNome.Text,
     Cargo: txtCargo.Text,
     Salario: Value(txtSalario.Text)
-})
+});
+
+Reset(txtNome);
+Reset(txtCargo);
+Reset(txtSalario);
 
 
 
