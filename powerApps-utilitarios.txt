@@ -80,14 +80,14 @@ Office365Outlook.SendEmailV2(
 );
 
 
-Office365Outlook.SendEmailV2(
+ffice365Outlook.SendEmailV2(
     
         dropdown_funcionario.Selected.email,
         "Equipment Inspection " & dropdown_equipamento.Selected.modelo & " " & dropdown_equipamento.Selected.marca & " " & dropdown_equipamento.Selected.serial_number,
-        "<h1>Information about Equipment Inspection:</h1>" &
-        "<p>" & observacoes_pintura.Text & "</p>" &
-        "<p>" & observacoes_depreciacao & "</p>" &
-        "<p>" & observacoes_eletrica & "</p>"
+        "<h3>Information about Equipment Inspection:</h3>" &
+        "<p>Nota da pintura: " & avaliacao_pintura.Value & " | Observações da pintura: " & observacoes_pintura.Text & "</p>" &
+        "<p>Nota da depreciação: " & avaliacao_depreciacao.Value & " | Observações da depreciação: " & observacoes_depreciacao & "</p>" &
+        "<p>Nota da parte elétrica: " & avaliacao_eletrica.Value & " | Observações da parte elétrica: " & observacoes_eletrica & "</p>"
     
 );
 
