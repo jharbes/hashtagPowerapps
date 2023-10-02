@@ -1,0 +1,27 @@
+adicionar em data o connector de email Office365Outlook
+
+
+Office365Outlook.SendEmailV2(
+    
+        txtResponsavel.Text,
+        "Problema reportado a respeito do produto" & Dropdown2.Selected.nome,
+        txtDescricao.Text
+    
+);
+
+
+Office365Outlook.SendEmailV2(
+    
+        dropdown_funcionario.Selected.email,
+        "Equipment Inspection " & dropdown_equipamento.Selected.modelo & " " & dropdown_equipamento.Selected.marca & " " & dropdown_equipamento.Selected.serial_number,
+        "<h1>Information about Equipment Inspection:</h1>" &
+        "<p>" & observacoes_pintura.Text & "</p>" &
+        "<p>" & observacoes_depreciacao & "</p>" &
+        "<p>" & observacoes_eletrica & "</p>"
+    
+);
+
+
+
+Rich text messages
+https://www.matthewdevaney.com/power-apps-send-email-using-outlook-the-complete-guide/#Email-Rich-Text-Messages
