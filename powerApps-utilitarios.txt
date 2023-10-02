@@ -68,35 +68,6 @@ No botão de submit do formulário também devemos atualizar para que sempre que
 
 ---------------------------------------------------------------------------
 
-adicionar em data o connector de email Office365Outlook
-
-
-Office365Outlook.SendEmailV2(
-    
-        txtResponsavel.Text,
-        "Problema reportado a respeito do produto" & Dropdown2.Selected.nome,
-        txtDescricao.Text
-    
-);
-
-
-ffice365Outlook.SendEmailV2(
-    
-        dropdown_funcionario.Selected.email,
-        "Equipment Inspection " & dropdown_equipamento.Selected.modelo & " " & dropdown_equipamento.Selected.marca & " " & dropdown_equipamento.Selected.serial_number,
-        "<h3>Information about Equipment Inspection:</h3>" &
-        "<p>Nota da pintura: " & avaliacao_pintura.Value & " | Observações da pintura: " & observacoes_pintura.Text & "</p>" &
-        "<p>Nota da depreciação: " & avaliacao_depreciacao.Value & " | Observações da depreciação: " & observacoes_depreciacao & "</p>" &
-        "<p>Nota da parte elétrica: " & avaliacao_eletrica.Value & " | Observações da parte elétrica: " & observacoes_eletrica & "</p>"
-    
-);
-
-
-
-Rich text messages
-https://www.matthewdevaney.com/power-apps-send-email-using-outlook-the-complete-guide/#Email-Rich-Text-Messages
-
----------------------------------------------------------------------------
 
 
 Cria linha na lista de sharepoint de dentro do aplicativo PowerApps, com mensagem de sucesso no final,
