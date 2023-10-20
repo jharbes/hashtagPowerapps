@@ -1,0 +1,22 @@
+SOLICITACAO INTERNA
+
+1- Aguard. Gerar TO
+2- Em Separacao
+3- Enviado
+
+
+
+SOLICITACAO EXTERNA
+
+Separacao
+
+1- Aguard. Gerar TO
+2- Em Separacao
+3- Enviado
+
+Expedicao
+
+4- Recebido
+5- Emissao de NF
+6- Expedição Solicitado
+7- Enviado
