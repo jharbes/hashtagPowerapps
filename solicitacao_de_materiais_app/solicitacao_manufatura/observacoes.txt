@@ -1,0 +1,28 @@
+bim matriz aparece no sap?
+
+nao tem como conferir no sap sem o tr (como sabe a lista de materiais)?
+
+estoque avançado celula 10A e célula 17
+
+
+Informações de INPUT:
+
+Solicitação Normal:
+
+- numero de ordem
+- TR
+- Celula
+- Projeto
+- Part number
+- Data necessidade
+
+
+Solicitação estoque avançado
+
+- numero de ordem
+- Celula
+- Projeto
+- Part number
+- Data necessidade
+- ZMPs para pagamento e quantidade
+- NS (posteriormente preenchido pelo CLP mais adiante)
