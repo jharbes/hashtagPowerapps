@@ -1,0 +1,13 @@
+SortByColumns(
+    Filter('msm_app-abertura_de_ordem',
+    StartsWith(status,"CLP -"),
+    StartsWith(ordem,input_busca_ordem_1.Text),
+    StartsWith(tr,input_busca_tr_1.Text),
+    Text(dropdown_busca_celula_1.Selected.celula) in celula,
+    Text(dropdown_busca_projeto_1.Selected.projeto) in projeto,
+    Text(dropdown_busca_status_1.Selected.status) in status,
+    Text(dropdown_busca_planejador_1.Selected.nome) in 'Created By'.DisplayName
+ ),
+"Created",SortOrder.Descending)
+
+
