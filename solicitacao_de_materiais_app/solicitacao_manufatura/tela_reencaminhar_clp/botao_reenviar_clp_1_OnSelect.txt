@@ -1,0 +1,93 @@
+Patch('msm_app-abertura_de_ordem',LookUp('msm_app-abertura_de_ordem',ID = ordem3.ID),
+    {
+        observacoes_manufatura: If(IsBlank(ordem3.observacoes_manufatura),input_observacoes_adicionais.Text,ordem3.observacoes_manufatura & Char(10) & "***OBSERVAÇÕES ADICIONAIS: " & input_observacoes_adicionais.Text),
+        status: "CLP - Em Separação",
+        tempo_retr_manufatura: ordem3.tempo_retr_manufatura + DateDiff(ordem3.data_clp, Now() ,TimeUnit.Hours)
+    }
+);
+
+Patch('msm_app-abertura_de_ordem',LookUp('msm_app-abertura_de_ordem',ID = ordem3.ID),
+    {
+        data_clp: Now()
+    }
+);
+
+Office365Outlook.SendEmailV2(
+    User().Email & ";
+    RioCLP_Separacao@TechnipFMC.com;
+    jorge.harbes@technipfmc.com;
+    PlanejamentoManufatura@digicorner.onmicrosoft.com",
+
+    "REENVIO de Ordem - Planejamento de Materiais MANUFATURA - ORDEM: " & ordem3.ordem & " - TR: " & ordem3.tr,
+
+    "<html>
+    <head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <style>
+        body{
+            text-align: center;
+        }
+        h2{
+            font-size: 24px;
+            margin-bottom: 30px;
+        }
+        table{
+            text-align: center;
+            margin: 0 auto;
+            margin-bottom: 30px;
+        }
+        th,td{
+            width: 80px;
+            font-size: 22px;
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+        th{
+            background-color: yellow;
+        }
+        td{
+            font-weight: bold;
+        }
+    </style>
+</head>
+    <body>
+
+    <h2>A seguinte ordem foi <strong>REENCAMINHADA</strong> ao CLP para tratamento no aplicativo de Solicitação de Materiais da Manufatura:</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th> Ordem </th>
+                <th> TR </th>
+                <th> Célula </th>
+                <th> Projeto </th>
+                <th> Part Number </th>
+                <th> Data Necessidade </th>
+                <th> Planejador </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td> " & ordem3.ordem & " </td>
+                <td> " & ordem3.tr & " </td>
+                <td> " & ordem3.celula & " </td>
+                <td> " & ordem3.projeto & " </td>
+                <td> " & ordem3.pn & " </td>
+                <td> " & Text(ordem3.data_necessidade, "dd/mm/yyyy") & " </td>
+                <td> " & ordem3.'Created By'.DisplayName & " </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Acesse aqui o aplicativo: <br><a    href='https://apps.powerapps.com/play/e/default-0804c951-93a0-405d-80e4-fa87c7551d6a/a/f6d3c80b-8622-47fa-a97e-6b862d00368b?tenantId=0804c951-93a0-405d-80e4-fa87c7551d6a&hint=d253e072-8f1b-49fa-8177-78b86b4831ca&sourcetime=1699985451228&source=portal#'>MANUFATURA - Solicitação de Materiais</a></h3>
+
+    </body>
+    </html>"
+);
+
+Reset(input_observacoes_adicionais);
+
+Notify("Ordem reencaminhada ao CLP com Sucesso!");
+
+Navigate(tela_detalhes_manufatura)
