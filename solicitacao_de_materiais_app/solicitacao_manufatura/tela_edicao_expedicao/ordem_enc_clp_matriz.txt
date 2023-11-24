@@ -1,0 +1,211 @@
+If(ordem_expedicao.status = "Expedição - Preparando Envio",
+
+
+// Se a ordem for normal (primeiro envio)
+
+    Patch('msm_app-abertura_de_ordem',LookUp('msm_app-abertura_de_ordem',ID = ordem_expedicao.ID ),
+        {
+            observacoes_expedicao: If(IsBlank(ordem_expedicao.observacoes_expedicao),input_observacoes_expedicao.Text,ordem_expedicao.observacoes_expedicao & Char(10) & "***OBSERVAÇÕES ADICIONAIS: " & input_observacoes_expedicao.Text),
+            status: "CLP Matriz - Em Recebimento",
+            usuario_expedicao: User().FullName,
+            tempo_expedicao: ordem_expedicao.tempo_expedicao + DateDiff(ordem_expedicao.data_expedicao, Now(), TimeUnit.Hours)
+        }
+    );
+
+    Patch('msm_app-abertura_de_ordem',LookUp('msm_app-abertura_de_ordem',ID = ordem_expedicao.ID ),
+        {
+            data_clp_matriz: Now(),
+            data_expedicao: Now()
+        }
+    );
+
+
+    Office365Outlook.SendEmailV2(
+        User().Email;
+        ordem_clp.'Created By'.Email & ";
+        RioCLP_Separacao@TechnipFMC.com;
+        jorge.harbes@technipfmc.com;
+        PlanejamentoManufatura@digicorner.onmicrosoft.com",
+
+        "ENVIO de Ordem ao CLP MATRIZ pela EXPEDIÇÃO - APP PLANEJAMENTO MANUFATURA - Ordem: " & ordem_expedicao.ordem & " - TR: " & ordem_expedicao.tr,
+
+        "<html>
+        <head>
+        <meta charset='UTF-8'>
+        <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+        <style>
+            body{
+                text-align: center;
+            }
+            h2{
+                font-size: 24px;
+                margin-bottom: 30px;
+            }
+            table{
+                text-align: center;
+                margin: 0 auto;
+                margin-bottom: 30px;
+            }
+            th,td{
+                width: 80px;
+                font-size: 22px;
+                border: 1px solid black;
+                border-collapse: collapse;
+            }
+            th{
+                background-color: yellow;
+            }
+            td{
+                font-weight: bold;
+            }
+        </style>
+    </head>
+        <body>
+
+        <h2>A seguinte ordem foi <strong>ENVIADA</strong> ao CLP MATRIZ para tratamento no aplicativo de Solicitação de Materiais da Manufatura:</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th> Ordem </th>
+                    <th> TR </th>
+                    <th> Célula </th>
+                    <th> Projeto </th>
+                    <th> Part Number </th>
+                    <th> Data Necessidade </th>
+                    <th> Planejador </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td> " & ordem_expedicao.ordem & " </td>
+                    <td> " & ordem_expedicao.tr & " </td>
+                    <td> " & ordem_expedicao.celula & " </td>
+                    <td> " & ordem_expedicao.projeto & " </td>
+                    <td> " & ordem_expedicao.pn & " </td>
+                    <td> " & Text(ordem_expedicao.data_necessidade, "dd/mm/yyyy")
+    & " </td>
+                    <td> " & ordem_expedicao.'Created By'.DisplayName & " </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>Acesse aqui o aplicativo: <br><a    href='https://apps.powerapps.com/play/e/default-0804c951-93a0-405d-80e4-fa87c7551d6a/a/f6d3c80b-8622-47fa-a97e-6b862d00368b?tenantId=0804c951-93a0-405d-80e4-fa87c7551d6a&hint=d253e072-8f1b-49fa-8177-78b86b4831ca&sourcetime=1699985451228&source=portal#'>MANUFATURA - Solicitação de Materiais</a></h3>
+
+        </body>
+        </html>"
+    );
+
+
+    Notify("Ordem encaminhada ao CLP da Matriz com Sucesso!");
+
+    Reset(input_observacoes_expedicao);
+
+    Navigate(tela_expedicao)
+
+,
+
+// Se a ordem for de retratamento
+
+
+    Patch('msm_app-abertura_de_ordem',LookUp('msm_app-abertura_de_ordem',ID = ordem_expedicao.ID ),
+        {
+            observacoes_expedicao: If(IsBlank(ordem_expedicao.observacoes_expedicao),input_observacoes_expedicao.Text,ordem_expedicao.observacoes_expedicao & Char(10) & "***OBSERVAÇÕES ADICIONAIS: " & input_observacoes_expedicao.Text),
+            status: "CLP Matriz - Em Recebimento",
+            usuario_expedicao: User().FullName,
+            tempo_retr_expedicao: ordem_expedicao.tempo_retr_expedicao + DateDiff(ordem_expedicao.data_expedicao, Now(), TimeUnit.Hours)
+        }
+    );
+
+    Patch('msm_app-abertura_de_ordem',LookUp('msm_app-abertura_de_ordem',ID = ordem_expedicao.ID ),
+        {
+            data_clp_matriz: Now(),
+            data_expedicao: Now()
+        }
+    );
+
+
+    Office365Outlook.SendEmailV2(
+        User().Email;
+        ordem_clp.'Created By'.Email & ";
+        RioCLP_Separacao@TechnipFMC.com;
+        jorge.harbes@technipfmc.com;
+        PlanejamentoManufatura@digicorner.onmicrosoft.com",
+
+        "REENVIO de Ordem ao CLP MATRIZ pela EXPEDIÇÃO - APP PLANEJAMENTO MANUFATURA - Ordem: " & ordem_expedicao.ordem & " - TR: " & ordem_expedicao.tr,
+
+        "<html>
+        <head>
+        <meta charset='UTF-8'>
+        <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+        <style>
+            body{
+                text-align: center;
+            }
+            h2{
+                font-size: 24px;
+                margin-bottom: 30px;
+            }
+            table{
+                text-align: center;
+                margin: 0 auto;
+                margin-bottom: 30px;
+            }
+            th,td{
+                width: 80px;
+                font-size: 22px;
+                border: 1px solid black;
+                border-collapse: collapse;
+            }
+            th{
+                background-color: yellow;
+            }
+            td{
+                font-weight: bold;
+            }
+        </style>
+    </head>
+        <body>
+
+        <h2>A seguinte ordem foi <strong>REENVIADA</strong> ao CLP MATRIZ para tratamento no aplicativo de Solicitação de Materiais da Manufatura:</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th> Ordem </th>
+                    <th> TR </th>
+                    <th> Célula </th>
+                    <th> Projeto </th>
+                    <th> Part Number </th>
+                    <th> Data Necessidade </th>
+                    <th> Planejador </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td> " & ordem_expedicao.ordem & " </td>
+                    <td> " & ordem_expedicao.tr & " </td>
+                    <td> " & ordem_expedicao.celula & " </td>
+                    <td> " & ordem_expedicao.projeto & " </td>
+                    <td> " & ordem_expedicao.pn & " </td>
+                    <td> " & Text(ordem_expedicao.data_necessidade, "dd/mm/yyyy")
+    & " </td>
+                    <td> " & ordem_expedicao.'Created By'.DisplayName & " </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>Acesse aqui o aplicativo: <br><a    href='https://apps.powerapps.com/play/e/default-0804c951-93a0-405d-80e4-fa87c7551d6a/a/f6d3c80b-8622-47fa-a97e-6b862d00368b?tenantId=0804c951-93a0-405d-80e4-fa87c7551d6a&hint=d253e072-8f1b-49fa-8177-78b86b4831ca&sourcetime=1699985451228&source=portal#'>MANUFATURA - Solicitação de Materiais</a></h3>
+
+        </body>
+        </html>"
+    );
+
+
+    Notify("Ordem encaminhada ao CLP da Matriz com Sucesso!");
+
+    Reset(input_observacoes_expedicao);
+
+    Navigate(tela_expedicao)
+
+)
