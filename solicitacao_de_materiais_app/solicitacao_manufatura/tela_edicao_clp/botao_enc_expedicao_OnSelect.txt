@@ -16,7 +16,8 @@ If(ordem_clp.status = "CLP - Em Separação",
 
         Patch('msm_app-abertura_de_ordem',LookUp('msm_app-abertura_de_ordem',ID = ordem_clp.ID),
         {
-            data_clp: Now()
+            data_clp: Now(),
+            data_expedicao: Now()
         });
 
 
@@ -125,7 +126,8 @@ Navigate(tela_clp)
 
         Patch('msm_app-abertura_de_ordem',LookUp('msm_app-abertura_de_ordem',ID = ordem_clp.ID),
         {
-            data_clp: Now()
+            data_clp: Now(),
+            data_expedicao: Now()
         });
 
 
