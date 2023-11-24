@@ -1,0 +1,13 @@
+SortByColumns(
+    Filter('msm_app-abertura_de_ordem',
+    StartsWith(status,"Expedição"),
+    StartsWith(ordem,input_busca_ordem_2.Text),
+    StartsWith(tr,input_busca_tr_2.Text),
+    Text(dropdown_busca_celula_2.Selected.celula) in celula,
+    Text(dropdown_busca_projeto_2.Selected.projeto) in projeto,
+    Text(dropdown_busca_status_2.Selected.status) in status,
+    Text(dropdown_busca_planejador_2.Selected.nome) in 'Created By'.DisplayName
+ ),
+"Created",SortOrder.Descending)
+
+
