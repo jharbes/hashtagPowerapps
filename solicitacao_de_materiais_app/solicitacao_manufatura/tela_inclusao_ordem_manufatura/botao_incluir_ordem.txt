@@ -1,0 +1,117 @@
+If(
+    IsBlank(input_numero_ordem) Or IsBlank(input_numero_tr) Or IsBlank(dropdown_celula) Or IsBlank(dropdown_projeto) Or IsBlank(input_pn) Or IsBlank(datepicker_data_necessidade),
+    Notify("Preencha todos os campos obrigatórios"),
+    Patch('msm_app-abertura_de_ordem',Defaults('msm_app-abertura_de_ordem'),
+    {
+        ordem: input_numero_ordem.Text,
+        tr: input_numero_tr.Text,
+        celula: dropdown_celula.SelectedText.Value,
+        projeto: dropdown_projeto.SelectedText.Value,
+        pn: input_pn.Text,
+        data_clp: Now(),
+        data_necessidade: datepicker_data_necessidade.SelectedDate,
+        status: "CLP - Em Separação",
+        planejador: User().FullName,
+        observacoes_manufatura: input_observacoes.Text
+    }
+);
+
+
+
+
+
+Office365Outlook.SendEmailV2(
+    User().Email & ";
+    RioCLP_Separacao@TechnipFMC.com;
+    jorge.harbes@technipfmc.com;
+    PlanejamentoManufatura@digicorner.onmicrosoft.com",
+
+    "ABERTURA de Ordem - PLANEJAMENTO MANUFATURA - ORDEM: " & input_numero_ordem & " - TR: " & input_numero_tr,
+
+    "<html>
+    <head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <style>
+        body{
+            text-align: center;
+        }
+        h2{
+            font-size: 24px;
+            margin-bottom: 30px;
+        }
+        table{
+            text-align: center;
+            margin: 0 auto;
+            margin-bottom: 30px;
+        }
+        th,td{
+            width: 80px;
+            font-size: 22px;
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+        th{
+            background-color: yellow;
+        }
+        td{
+            font-weight: bold;
+        }
+    </style>
+</head>
+    <body>
+
+    <h2>A seguinte ordem encontra-se <strong>PENDENTE</strong> de tratamento no aplicativo MANUFATURA - Solicitação de Materiais:</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th> Ordem </th>
+                <th> TR </th>
+                <th> Célula </th>
+                <th> Projeto </th>
+                <th> Part Number </th>
+                <th> Data Necessidade </th>
+                <th> Planejador </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td> " & input_numero_ordem.Text & " </td>
+                <td> " & input_numero_tr.Text & " </td>
+                <td> " & dropdown_celula.SelectedText.Value & " </td>
+                <td> " & dropdown_projeto.SelectedText.Value & " </td>
+                <td> " & input_pn.Text & " </td>
+                <td> " & Text(datepicker_data_necessidade.SelectedDate, "dd/mm/yyyy") & " </td>
+                <td> " & User().FullName & " </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Acesse aqui o aplicativo: <br><a    href='https://apps.powerapps.com/play/e/default-0804c951-93a0-405d-80e4-fa87c7551d6a/a/f6d3c80b-8622-47fa-a97e-6b862d00368b?tenantId=0804c951-93a0-405d-80e4-fa87c7551d6a&hint=d253e072-8f1b-49fa-8177-78b86b4831ca&sourcetime=1699985451228&source=portal#'>MANUFATURA - Solicitação de Materiais</a></h3>
+
+    </body>
+    </html>"
+);
+
+
+Reset(input_numero_ordem);
+Reset(input_numero_tr);
+Reset(dropdown_celula);
+Reset(dropdown_projeto);
+Reset(input_pn);
+Reset(datepicker_data_necessidade);
+Reset(input_observacoes);
+
+
+
+Notify("Ordem adicionada com sucesso!");
+
+
+
+);
+
+
+
+
+
