@@ -1,0 +1,12 @@
+SortByColumns(
+    Filter('msm_app-abertura_de_ordem',
+    StartsWith(ordem,input_busca_ordem.Text),
+    StartsWith(tr,input_busca_tr.Text),
+    Text(dropdown_busca_celula.Selected.celula) in celula,
+    Text(dropdown_busca_projeto.Selected.projeto) in projeto,
+    Text(dropdown_busca_status.Selected.status) in status,
+    Text(dropdown_busca_planejador.Selected.nome) in 'Created By'.DisplayName
+ ),
+"Created",SortOrder.Descending)
+
+
