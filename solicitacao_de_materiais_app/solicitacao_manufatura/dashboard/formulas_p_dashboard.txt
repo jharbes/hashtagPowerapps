@@ -1,0 +1,7 @@
+ColunaCalculada = 
+VAR DataInicio = Tabela[DataInicio]
+VAR DataFim = Tabela[DataFim]
+VAR IntervaloDatas = CALENDAR(DataInicio, DataFim)
+VAR FinsDeSemana = FILTER(IntervaloDatas, WEEKDAY(Date[Date], 2) > 5)
+VAR ContagemFinsDeSemana = COUNTROWS(FinsDeSemana)
+RETURN IF(ContagemFinsDeSemana >= 2, Tabela[ColunaValor] - 48, Tabela[ColunaValor])
