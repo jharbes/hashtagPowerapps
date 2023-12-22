@@ -1,9 +1,29 @@
+// Criando uma coleção de datas entre a data de inicio e data de fim do periodo
+ClearCollect(
+    lista_de_datas,
+    ForAll(
+        Sequence(DateDiff(ordem_clp_matriz.data_clp_matriz, Now()) + 1),
+        DateAdd(ordem_clp_matriz.data_clp_matriz, Value - 1)
+    )
+);
+
+
+// Contar finais de semana na coleção DateRange, Weekday(Value) = 1 (domingo)
+Set(
+    numero_fds,
+    CountIf(
+        lista_de_datas,
+        Weekday(Value) = 1
+    )
+);
+
+
 Patch('msm_app-abertura_de_ordem',LookUp('msm_app-abertura_de_ordem',ID = ordem_clp_matriz.ID),
     {
         observacoes_clp_matriz: If(IsBlank(ordem_clp_matriz.observacoes_clp_matriz),input_obs_clp_matriz.Text,ordem_clp_matriz.observacoes_clp_matriz & Char(10) & "***OBSERVAÇÕES ADICIONAIS: " & input_obs_clp_matriz.Text),
         status: "Expedição - Devolvido CLP Matriz",
         usuario_clp_matriz: User().FullName,
-        tempo_clp_matriz: ordem_clp_matriz.tempo_clp_matriz + DateDiff(ordem_clp_matriz.data_clp_matriz, Now(), TimeUnit.Hours)
+        tempo_clp_matriz: ordem_clp_matriz.tempo_clp_matriz + DateDiff(ordem_clp_matriz.data_clp_matriz, Now(), TimeUnit.Hours) - numero_fds * 48
     }
 );
 
@@ -14,13 +34,21 @@ Patch('msm_app-abertura_de_ordem',LookUp('msm_app-abertura_de_ordem',ID = ordem_
     }
 );
 
+Patch('msm_app-datas_ordens',Defaults('msm_app-datas_ordens'),
+    {
+        ordem: ordem_clp_matriz.ordem,
+        data: Now(),
+        status_fim: "Expedição - Devolvido CLP Matriz",
+        usuario: User().FullName
+    });
+
 
 Office365Outlook.SendEmailV2(
     User().Email;
-    ordem_clp.'Created By'.Email & ";
-    RioCLP_Separacao@TechnipFMC.com;
-    jorge.harbes@technipfmc.com;
-    PlanejamentoManufatura@digicorner.onmicrosoft.com",
+    ordem_clp_matriz.'Created By'.Email & ";
+    carlos.arcanjo@technipfmc.com;
+    RioCLP_Expedicao@technipfmc.com;
+    MANUFATURA_Solicatacao_de_Materiais_Planners@TechnipFMC.com",
 
     "DEVOLUÇÃO de Ordem à EXPEDIÇÃO pelo CLP Matriz - APP PLANEJAMENTO MANUFATURA - ORDEM: " & ordem_clp_matriz.ordem & " - TR: " & ordem_clp_matriz.tr,
 
@@ -57,7 +85,7 @@ Office365Outlook.SendEmailV2(
 </head>
     <body>
 
-    <h2>A seguinte ordem foi <strong>DEVOLVIDA</strong> à EXPEDIÇÃO pelo CLP Matriz para tratamento no aplicativo de Solicitação de Materiais da Manufatura:</h2>
+    <h2>A seguinte ordem foi <strong>DEVOLVIDA</strong> à EXPEDIÇÃO pelo CLP Matriz para tratamento no aplicativo MANUFATURA - Solicitação de Materiais:</h2>
 
     <table>
         <thead>
