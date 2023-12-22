@@ -1,9 +1,30 @@
+// Criando uma coleção de datas entre a data de inicio e data de fim do periodo
+ClearCollect(
+    lista_de_datas,
+    ForAll(
+        Sequence(DateDiff(ordem_clp.data_clp, Now()) + 1),
+        DateAdd(ordem_clp.data_clp, Value - 1)
+    )
+);
+
+
+// Contar finais de semana na coleção DateRange, Weekday(Value) = 1 (domingo)
+Set(
+    numero_fds,
+    CountIf(
+        lista_de_datas,
+        Weekday(Value) = 1
+    )
+);
+
+
 Patch('msm_app-abertura_de_ordem',LookUp('msm_app-abertura_de_ordem',ID = ordem_clp.ID),
     {
         observacoes_clp: If(IsBlank(ordem_clp.observacoes_clp),input_observacoes_clp.Text,ordem_clp.observacoes_clp & Char(10) & "***OBSERVAÇÕES ADICIONAIS: " & input_observacoes_clp.Text),
         status: "Planejamento - Devolvido CLP",
         usuario_clp: User().FullName,
-        tempo_clp: ordem_clp.tempo_clp + DateDiff(ordem_clp.data_clp, Now(), TimeUnit.Hours)
+        // contabilizando o tempo total que a peça permaneceu no setor
+        tempo_clp: ordem_clp.tempo_clp + DateDiff(ordem_clp.data_clp, Now(), TimeUnit.Hours) - numero_fds * 48
     }
 );
 
@@ -13,15 +34,22 @@ Patch('msm_app-abertura_de_ordem',LookUp('msm_app-abertura_de_ordem',ID = ordem_
     }
 );
 
+Patch('msm_app-datas_ordens',Defaults('msm_app-datas_ordens'),
+    {
+        ordem: ordem_clp.ordem,
+        data: Now(),
+        status_fim: "Planejamento - Devolvido CLP",
+        usuario: User().FullName
+    });
+
 
 Office365Outlook.SendEmailV2(
     User().Email;
     ordem_clp.'Created By'.Email & ";
     RioCLP_Separacao@TechnipFMC.com;
-    jorge.harbes@technipfmc.com;
-    PlanejamentoManufatura@digicorner.onmicrosoft.com",
+    MANUFATURA_Solicatacao_de_Materiais_Planners@TechnipFMC.com",
 
-    "DEVOLUÇÃO de Ordem - PLANEJAMENTO MANUFATURA - ORDEM: " & ordem_clp.ordem & " - TR: " & ordem_clp.tr,
+    "DEVOLUÇÃO de Ordem ao PLANEJAMENTO - APP PLANEJAMENTO MANUFATURA - ORDEM: " & ordem_clp.ordem & " - TR: " & ordem_clp.tr,
 
     "<html>
     <head>
@@ -56,7 +84,7 @@ Office365Outlook.SendEmailV2(
 </head>
     <body>
 
-    <h2>A seguinte ordem foi <strong>DEVOLVIDA</strong> ao PLANEJAMENTO MANUFATURA para tratamento no aplicativo de Solicitação de Materiais da Manufatura:</h2>
+    <h2>A seguinte ordem foi <strong>DEVOLVIDA</strong> ao PLANEJAMENTO MANUFATURA para tratamento no aplicativo MANUFATURA - Solicitação de Materiais:</h2>
 
     <table>
         <thead>
