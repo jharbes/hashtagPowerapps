@@ -8,7 +8,7 @@ ClearCollect(
 );
 
 
-// Contar finais de semana na coleção DateRange
+// Contar finais de semana na coleção DateRange, Weekday(Value) = 1 (domingo)
 Set(
     numero_fds,
     CountIf(
