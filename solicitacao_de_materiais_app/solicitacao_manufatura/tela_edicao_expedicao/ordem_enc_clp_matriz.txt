@@ -1,3 +1,24 @@
+// Criando uma coleção de datas entre a data de inicio e data de fim do periodo
+ClearCollect(
+    lista_de_datas,
+    ForAll(
+        Sequence(DateDiff(ordem_expedicao.data_expedicao, Now()) + 1),
+        DateAdd(ordem_expedicao.data_expedicao, Value - 1)
+    )
+);
+
+
+// Contar finais de semana na coleção DateRange, Weekday(Value) = 1 (domingo)
+Set(
+    numero_fds,
+    CountIf(
+        lista_de_datas,
+        Weekday(Value) = 1
+    )
+);
+
+
+
 If(ordem_expedicao.status = "Expedição - Preparando Envio",
 
 
@@ -8,7 +29,7 @@ If(ordem_expedicao.status = "Expedição - Preparando Envio",
             observacoes_expedicao: If(IsBlank(ordem_expedicao.observacoes_expedicao),input_observacoes_expedicao.Text,ordem_expedicao.observacoes_expedicao & Char(10) & "***OBSERVAÇÕES ADICIONAIS: " & input_observacoes_expedicao.Text),
             status: "CLP Matriz - Em Recebimento",
             usuario_expedicao: User().FullName,
-            tempo_expedicao: ordem_expedicao.tempo_expedicao + DateDiff(ordem_expedicao.data_expedicao, Now(), TimeUnit.Hours)
+            tempo_expedicao: ordem_expedicao.tempo_expedicao + DateDiff(ordem_expedicao.data_expedicao, Now(), TimeUnit.Hours) - numero_fds * 48
         }
     );
 
@@ -19,13 +40,21 @@ If(ordem_expedicao.status = "Expedição - Preparando Envio",
         }
     );
 
+    Patch('msm_app-datas_ordens',Defaults('msm_app-datas_ordens'),
+    {
+        ordem: ordem_expedicao.ordem,
+        data: Now(),
+        status_fim: "CLP Matriz - Em Recebimento",
+        usuario: User().FullName
+    });
+
 
     Office365Outlook.SendEmailV2(
         User().Email;
-        ordem_clp.'Created By'.Email & ";
-        RioCLP_Separacao@TechnipFMC.com;
-        jorge.harbes@technipfmc.com;
-        PlanejamentoManufatura@digicorner.onmicrosoft.com",
+        ordem_expedicao.'Created By'.Email & ";
+        carlos.arcanjo@technipfmc.com;
+        RioCLP_Expedicao@technipfmc.com;
+        MANUFATURA_Solicatacao_de_Materiais_Planners@TechnipFMC.com",
 
         "ENVIO de Ordem ao CLP MATRIZ pela EXPEDIÇÃO - APP PLANEJAMENTO MANUFATURA - Ordem: " & ordem_expedicao.ordem & " - TR: " & ordem_expedicao.tr,
 
@@ -62,7 +91,7 @@ If(ordem_expedicao.status = "Expedição - Preparando Envio",
     </head>
         <body>
 
-        <h2>A seguinte ordem foi <strong>ENVIADA</strong> ao CLP MATRIZ para tratamento no aplicativo de Solicitação de Materiais da Manufatura:</h2>
+        <h2>A seguinte ordem foi <strong>ENVIADA</strong> ao CLP MATRIZ para tratamento no aplicativo MANUFATURA - Solicitação de Materiais:</h2>
 
         <table>
             <thead>
@@ -113,7 +142,7 @@ If(ordem_expedicao.status = "Expedição - Preparando Envio",
             observacoes_expedicao: If(IsBlank(ordem_expedicao.observacoes_expedicao),input_observacoes_expedicao.Text,ordem_expedicao.observacoes_expedicao & Char(10) & "***OBSERVAÇÕES ADICIONAIS: " & input_observacoes_expedicao.Text),
             status: "CLP Matriz - Em Recebimento",
             usuario_expedicao: User().FullName,
-            tempo_retr_expedicao: ordem_expedicao.tempo_retr_expedicao + DateDiff(ordem_expedicao.data_expedicao, Now(), TimeUnit.Hours)
+            tempo_retr_expedicao: ordem_expedicao.tempo_retr_expedicao + DateDiff(ordem_expedicao.data_expedicao, Now(), TimeUnit.Hours) - numero_fds * 48
         }
     );
 
@@ -124,15 +153,23 @@ If(ordem_expedicao.status = "Expedição - Preparando Envio",
         }
     );
 
+    Patch('msm_app-datas_ordens',Defaults('msm_app-datas_ordens'),
+    {
+        ordem: ordem_expedicao.ordem,
+        data: Now(),
+        status_fim: "CLP Matriz - Em Recebimento",
+        usuario: User().FullName
+    });
+
 
     Office365Outlook.SendEmailV2(
         User().Email;
-        ordem_clp.'Created By'.Email & ";
-        RioCLP_Separacao@TechnipFMC.com;
-        jorge.harbes@technipfmc.com;
-        PlanejamentoManufatura@digicorner.onmicrosoft.com",
+        ordem_expedicao.'Created By'.Email & ";
+        carlos.arcanjo@technipfmc.com;
+        RioCLP_Expedicao@technipfmc.com;
+        MANUFATURA_Solicatacao_de_Materiais_Planners@TechnipFMC.com",
 
-        "REENVIO de Ordem ao CLP MATRIZ pela EXPEDIÇÃO - APP PLANEJAMENTO MANUFATURA - Ordem: " & ordem_expedicao.ordem & " - TR: " & ordem_expedicao.tr,
+        "REENVIO de Ordem ao CLP MATRIZ pela EXPEDIÇÃO - APP PLANEJAMENTO MANUFATURA - ORDEM: " & ordem_expedicao.ordem & " - TR: " & ordem_expedicao.tr,
 
         "<html>
         <head>
@@ -167,7 +204,7 @@ If(ordem_expedicao.status = "Expedição - Preparando Envio",
     </head>
         <body>
 
-        <h2>A seguinte ordem foi <strong>REENVIADA</strong> ao CLP MATRIZ para tratamento no aplicativo de Solicitação de Materiais da Manufatura:</h2>
+        <h2>A seguinte ordem foi <strong>REENVIADA</strong> ao CLP MATRIZ para tratamento no aplicativo MANUFATURA - Solicitação de Materiais:</h2>
 
         <table>
             <thead>
