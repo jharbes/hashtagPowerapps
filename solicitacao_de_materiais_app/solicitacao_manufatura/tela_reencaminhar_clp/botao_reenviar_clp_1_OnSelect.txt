@@ -1,8 +1,31 @@
+// Criando uma coleção de datas entre a data de inicio e data de fim do periodo
+ClearCollect(
+    lista_de_datas,
+    ForAll(
+        Sequence(DateDiff(ordem3.data_clp, Now()) + 1),
+        DateAdd(ordem3.data_clp, Value - 1)
+    )
+);
+
+// Contar finais de semana na coleção DateRange, Weekday(Value) = 1 (domingo)
+Set(
+    numero_fds,
+    CountIf(
+        lista_de_datas,
+        Weekday(Value) = 1
+    )
+);
+
+
 Patch('msm_app-abertura_de_ordem',LookUp('msm_app-abertura_de_ordem',ID = ordem3.ID),
     {
-        observacoes_manufatura: If(IsBlank(ordem3.observacoes_manufatura),input_observacoes_adicionais.Text,ordem3.observacoes_manufatura & Char(10) & "***OBSERVAÇÕES ADICIONAIS: " & input_observacoes_adicionais.Text),
+        observacoes_manufatura: If(
+            IsBlank(ordem3.observacoes_manufatura),
+            input_observacoes_adicionais.Text,
+            ordem3.observacoes_manufatura & Char(10) & "***OBSERVAÇÕES ADICIONAIS: " & input_observacoes_adicionais.Text),
         status: "CLP - Em Separação",
-        tempo_retr_manufatura: ordem3.tempo_retr_manufatura + DateDiff(ordem3.data_clp, Now() ,TimeUnit.Hours)
+        // contabilizando o tempo total que a peça permaneceu no setor
+        tempo_retr_manufatura: ordem3.tempo_retr_manufatura + DateDiff(ordem3.data_clp, Now() ,TimeUnit.Hours) - numero_fds * 48
     }
 );
 
@@ -12,13 +35,23 @@ Patch('msm_app-abertura_de_ordem',LookUp('msm_app-abertura_de_ordem',ID = ordem3
     }
 );
 
+
+Patch('msm_app-datas_ordens',Defaults('msm_app-datas_ordens'),
+    {
+        ordem: ordem3.ordem,
+        data: Now(),
+        status_fim: "CLP - Em Separação",
+        usuario: User().FullName
+    });
+
 Office365Outlook.SendEmailV2(
     User().Email & ";
     RioCLP_Separacao@TechnipFMC.com;
-    jorge.harbes@technipfmc.com;
-    PlanejamentoManufatura@digicorner.onmicrosoft.com",
+    MANUFATURA_Solicatacao_de_Materiais_Planners@TechnipFMC.com;
+    paschoal.berto@technipfmc.com;
+    glaucio.castelo@technipfmc.com",
 
-    "REENVIO de Ordem - Planejamento de Materiais MANUFATURA - ORDEM: " & ordem3.ordem & " - TR: " & ordem3.tr,
+    "REENVIO de Ordem ao CLP pelo Planejamento - APP PLANEJAMENTO MANUFATURA - ORDEM: " & ordem3.ordem & " - TR: " & ordem3.tr,
 
     "<html>
     <head>
@@ -53,7 +86,7 @@ Office365Outlook.SendEmailV2(
 </head>
     <body>
 
-    <h2>A seguinte ordem foi <strong>REENCAMINHADA</strong> ao CLP para tratamento no aplicativo de Solicitação de Materiais da Manufatura:</h2>
+    <h2>A seguinte ordem foi <strong>REENCAMINHADA</strong> ao CLP pelo Planejamento Manufatura para tratamento no APP MANUFATURA - Solicitação de Materiais:</h2>
 
     <table>
         <thead>
@@ -90,4 +123,4 @@ Reset(input_observacoes_adicionais);
 
 Notify("Ordem reencaminhada ao CLP com Sucesso!");
 
-Navigate(tela_detalhes_manufatura)
+Navigate(tela_manufatura1)
