@@ -1,0 +1,22 @@
+// Criando uma coleção de datas entre a data de inicio e data de fim do periodo
+ClearCollect(
+    lista_de_datas,
+    ForAll(
+        Sequence(DateDiff(ordem3.data_clp, Now()) + 1),
+        DateAdd(ordem3.data_clp, Value - 1)
+    )
+);
+
+
+// Contar finais de semana na coleção DateRange
+Set(
+    numero_fds,
+    CountIf(
+        lista_de_datas,
+        Weekday(Value) = 1
+    )
+);
+
+
+// contabilizando o tempo total que a peça permaneceu no setor
+        tempo_retr_manufatura: ordem3.tempo_retr_manufatura + DateDiff(ordem3.data_clp, Now() ,TimeUnit.Hours) - numero_fds * 48
