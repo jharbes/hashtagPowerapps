@@ -1,19 +1,84 @@
-Patch('msm_app-abertura_de_ordem',LookUp('msm_app-abertura_de_ordem',ID = ordem_expedicao.ID),
+// Criando uma coleção de datas entre a data de inicio e data de fim do periodo
+ClearCollect(
+    lista_de_datas,
+    ForAll(
+        Sequence(DateDiff(ordem_clp_matriz.data_clp_matriz, Now()) + 1),
+        DateAdd(ordem_clp_matriz.data_clp_matriz, Value - 1)
+    )
+);
+
+
+// Contar finais de semana na coleção DateRange, Weekday(Value) = 1 (domingo)
+Set(
+    numero_fds,
+    CountIf(
+        lista_de_datas,
+        Weekday(Value) = 1
+    )
+);
+
+
+Patch('msm_app-abertura_de_ordem',LookUp('msm_app-abertura_de_ordem',ID = ordem_clp_matriz.ID),
     {
-        observacoes_clp_matriz: If(IsBlank(ordem_clp_matriz.observacoes_clp_matriz),input_obs_clp_matriz.Text,ordem_clp_matriz.observacoes_clp_matriz & Char(10) & "***OBSERVAÇÕES ADICIONAIS: " & input_obs_clp_matriz.Text),
+        observacoes_clp_matriz: If(
+            IsBlank(ordem_clp_matriz.observacoes_clp_matriz),
+            input_obs_clp_matriz.Text,
+            ordem_clp_matriz.observacoes_clp_matriz & Char(10) & "***OBSERVAÇÕES ADICIONAIS: " & input_obs_clp_matriz.Text),
         status: "Finalizado",
         data_clp_matriz: Now(),
-        usuario_clp_matriz: User().FullName
+        usuario_clp_matriz: User().FullName,
+        tempo_clp_matriz: ordem_clp_matriz.tempo_clp_matriz + DateDiff(ordem_clp_matriz.data_clp_matriz, Now(), TimeUnit.Hours) - numero_fds * 48,
+        data_finalizacao: Now()
     }
 );
+
+Patch('msm_app-datas_ordens',Defaults('msm_app-datas_ordens'),
+    {
+        ordem: ordem_clp_matriz.ordem,
+        data: Now(),
+        status_fim: "Finalizado",
+        usuario: User().FullName
+    });
+
+/*
+Patch('msm_app-abertura_de_ordem-backup',Defaults('msm_app-abertura_de_ordem-backup'),
+    {
+        id_referencia: ordem_clp_matriz.ID,
+        ordem: ordem_clp_matriz.ordem,
+        tr: ordem_clp_matriz.tr,
+        celula: ordem_clp_matriz.celula,
+        projeto: ordem_clp_matriz.projeto,
+        pn: ordem_clp_matriz.pn,
+        data_necessidade: ordem_clp_matriz.data_necessidade,
+        status: "Finalizado",
+        planejador: ordem_clp_matriz.planejador,
+        observacoes_manufatura: ordem_clp_matriz.observacoes_manufatura,
+        tempo_retr_manufatura: ordem_clp_matriz.tempo_retr_manufatura,
+        observacoes_clp: ordem_clp_matriz.observacoes_clp,
+        data_clp: ordem_clp_matriz.data_clp,
+        usuario_clp: ordem_clp_matriz.usuario_clp,
+        tempo_retr_clp: ordem_clp_matriz.tempo_retr_clp,
+        tempo_clp: ordem_clp_matriz.tempo_clp,
+        observacoes_expedicao: ordem_clp_matriz.observacoes_expedicao,
+        data_expedicao: ordem_clp_matriz.data_expedicao,
+        usuario_expedicao: ordem_clp_matriz.usuario_expedicao,
+        tempo_retr_expedicao: ordem_clp_matriz.tempo_retr_expedicao,
+        tempo_expedicao: ordem_clp_matriz.tempo_expedicao,
+        observacoes_clp_matriz: ordem_clp_matriz.observacoes_clp_matriz,
+        data_clp_matriz: ordem_clp_matriz.data_clp_matriz,
+        data_finalizacao: ordem_clp_matriz.data_finalizacao,
+        usuario_clp_matriz: ordem_clp_matriz.usuario_clp_matriz,
+        tempo_clp_matriz: ordem_clp_matriz.tempo_clp_matriz,
+        Attachments: ordem_clp_matriz.Attachments
+    });
+*/
 
 
 Office365Outlook.SendEmailV2(
     User().Email;
-    ordem_clp.'Created By'.Email & ";
-    RioCLP_Separacao@TechnipFMC.com;
-    jorge.harbes@technipfmc.com;
-    PlanejamentoManufatura@digicorner.onmicrosoft.com",
+    ordem_clp_matriz.'Created By'.Email & ";
+    carlos.arcanjo@technipfmc.com;
+    MANUFATURA_Solicatacao_de_Materiais_Planners@TechnipFMC.com",
 
     "Ordem ENVIADA à PRODUÇÃO - PLANEJAMENTO MANUFATURA - Ordem: " & ordem_clp_matriz.ordem & " - TR: " & ordem_clp_matriz.tr,
 
@@ -50,7 +115,7 @@ Office365Outlook.SendEmailV2(
 </head>
     <body>
 
-    <h2>A seguinte ordem foi <strong>ENVIADA</strong> à PRODUÇÃO pelo CLP Matriz no aplicativo de Solicitação de Materiais da Manufatura:</h2>
+    <h2>A seguinte ordem foi <strong>ENVIADA</strong> à PRODUÇÃO pelo CLP Matriz no aplicativo MANUFATURA - Solicitação de Materiais:</h2>
 
     <table>
         <thead>
