@@ -16,17 +16,53 @@ If(
     }
 );
 
+    Patch('msm_app-datas_ordens',Defaults('msm_app-datas_ordens'),
+    {
+        ordem: input_numero_ordem.Text,
+        data: Now(),
+        status_fim: "CLP - Em Separação",
+        usuario: User().FullName
+    });
+
+    /*
+    'msm_app-folha_de_rosto-manufatura'.Run(
+        "MATRIZ",
+        input_numero_ordem.Text,
+        input_numero_tr.Text,
+        User().FullName,
+        input_pn.Text,
+        dropdown_celula.SelectedText.Value,
+        dropdown_projeto.SelectedText.Value
+    );
+    */
+
+    'flow-msm_app-folha_de_rosto-v2'.Run(
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "MATRIZ",
+        input_numero_ordem.Text,
+        input_numero_tr.Text,
+        dropdown_projeto.SelectedText.Value,
+        User().FullName,
+        input_pn.Text,
+        dropdown_celula.SelectedText.Value
+    );
 
 
-
-
+/*
 Office365Outlook.SendEmailV2(
     User().Email & ";
     RioCLP_Separacao@TechnipFMC.com;
     jorge.harbes@technipfmc.com;
     PlanejamentoManufatura@digicorner.onmicrosoft.com",
 
-    "ABERTURA de Ordem - PLANEJAMENTO MANUFATURA - ORDEM: " & input_numero_ordem & " - TR: " & input_numero_tr,
+    "ABERTURA de Ordem - APP PLANEJAMENTO MANUFATURA - ORDEM: " & input_numero_ordem & " - TR: " & input_numero_tr,
 
     "<html>
     <head>
@@ -61,7 +97,7 @@ Office365Outlook.SendEmailV2(
 </head>
     <body>
 
-    <h2>A seguinte ordem encontra-se <strong>PENDENTE</strong> de tratamento no aplicativo MANUFATURA - Solicitação de Materiais:</h2>
+    <h2>A seguinte ordem foi ABERTA e encontra-se <strong>PENDENTE</strong> de tratamento pelo CLP no aplicativo MANUFATURA - Solicitação de Materiais:</h2>
 
     <table>
         <thead>
@@ -93,7 +129,7 @@ Office365Outlook.SendEmailV2(
     </body>
     </html>"
 );
-
+*/
 
 Reset(input_numero_ordem);
 Reset(input_numero_tr);
