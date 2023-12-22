@@ -1,16 +1,36 @@
+// Criando uma coleção de datas entre a data de inicio e data de fim do periodo
+ClearCollect(
+    lista_de_datas,
+    ForAll(
+        Sequence(DateDiff(ordem_clp.data_clp, Now()) + 1),
+        DateAdd(ordem_clp.data_clp, Value - 1)
+    )
+);
+
+
+// Contar finais de semana na coleção DateRange, Weekday(Value) = 1 (domingo)
+Set(
+    numero_fds,
+    CountIf(
+        lista_de_datas,
+        Weekday(Value) = 1
+    )
+);
+
+
 If(ordem_clp.status = "CLP - Em Separação", 
  
  // Se for CLP em Separação
  
     If(
-        CountRows(Form1.LastSubmit.Attachments) = 0,
+        tem_arquivo = false,
         Notify("Preencha todos os campos obrigatórios!"),
 
         Patch('msm_app-abertura_de_ordem',LookUp('msm_app-abertura_de_ordem',ID = ordem_clp.ID),
         {
             observacoes_clp: If(IsBlank(ordem_clp.observacoes_clp),input_observacoes_clp.Text,ordem_clp.observacoes_clp & Char(10) &    "***OBSERVAÇÕES ADICIONAIS: " & input_observacoes_clp.Text),
             status: "Expedição - Preparando Envio",
-            tempo_clp: ordem_clp.tempo_clp + DateDiff(ordem_clp.data_clp, Now(), TimeUnit.Hours),
+            tempo_clp: ordem_clp.tempo_clp + DateDiff(ordem_clp.data_clp, Now(), TimeUnit.Hours) - numero_fds * 48,
             usuario_clp: User().FullName
         },Form1.Updates);
 
@@ -20,17 +40,25 @@ If(ordem_clp.status = "CLP - Em Separação",
             data_expedicao: Now()
         });
 
+        Patch('msm_app-datas_ordens',Defaults('msm_app-datas_ordens'),
+    {
+        ordem: ordem_clp.ordem,
+        data: Now(),
+        status_fim: "Expedição - Preparando Envio",
+        usuario: User().FullName
+    });
+
 
 
 
     Office365Outlook.SendEmailV2(
         User().Email;
         ordem_clp.'Created By'.Email & ";
+        RioCLP_Expedicao@technipfmc.com;
         RioCLP_Separacao@TechnipFMC.com;
-        jorge.harbes@technipfmc.com;
-        PlanejamentoManufatura@digicorner.onmicrosoft.com",
+        MANUFATURA_Solicatacao_de_Materiais_Planners@TechnipFMC.com",
 
-        "ENVIO de Ordem à EXPEDIÇÃO - Planejamento de Materiais MANUFATURA - ORDEM: " & ordem_clp.ordem & " - TR: " & ordem_clp.tr,
+        "ENVIO de Ordem à EXPEDIÇÃO pelo CLP - APP  PLANEJAMENTO MANUFATURA - ORDEM: " & ordem_clp.ordem & " - TR: " & ordem_clp.tr,
 
         "<html>
         <head>
@@ -65,7 +93,7 @@ If(ordem_clp.status = "CLP - Em Separação",
     </head>
         <body>
 
-        <h2>A seguinte ordem foi <strong>ENVIADA</strong> à EXPEDIÇÃO para tratamento no aplicativo de Solicitação de Materiais da Manufatura:</h2>
+        <h2>A seguinte ordem foi <strong>ENVIADA</strong> à EXPEDIÇÃO pelo CLP para tratamento no aplicativo MANUFATURA - Solicitação de Materiais:</h2>
 
         <table>
             <thead>
@@ -113,14 +141,14 @@ Navigate(tela_clp)
 // Se não for CLP em separaçao (devolvido)
 
     If(
-        CountRows(Form1.LastSubmit.Attachments) = 0,
+        tem_arquivo = false,
         Notify("Preencha todos os campos obrigatórios!"),
 
         Patch('msm_app-abertura_de_ordem',LookUp('msm_app-abertura_de_ordem',ID = ordem_clp.ID),
         {
             observacoes_clp: If(IsBlank(ordem_clp.observacoes_clp),input_observacoes_clp.Text,ordem_clp.observacoes_clp & Char(10) &    "***OBSERVAÇÕES ADICIONAIS: " & input_observacoes_clp.Text),
             status: "Expedição - Preparando Envio",
-            tempo_retr_clp: ordem_clp.tempo_retr_clp + DateDiff(ordem_clp.data_clp, Now(), TimeUnit.Hours),
+            tempo_retr_clp: ordem_clp.tempo_retr_clp + DateDiff(ordem_clp.data_clp, Now(), TimeUnit.Hours) - numero_fds * 48,
             usuario_clp: User().FullName
         },Form1.Updates);
 
@@ -130,6 +158,14 @@ Navigate(tela_clp)
             data_expedicao: Now()
         });
 
+        Patch('msm_app-datas_ordens',Defaults('msm_app-datas_ordens'),
+    {
+        ordem: ordem_clp.ordem,
+        data: Now(),
+        status_fim: "Expedição - Preparando Envio",
+        usuario: User().FullName
+    });
+
 
 
 
@@ -137,10 +173,10 @@ Navigate(tela_clp)
         User().Email;
         ordem_clp.'Created By'.Email & ";
         RioCLP_Separacao@TechnipFMC.com;
-        jorge.harbes@technipfmc.com;
-        PlanejamentoManufatura@digicorner.onmicrosoft.com",
+        RioCLP_Expedicao@technipfmc.com;
+        MANUFATURA_Solicatacao_de_Materiais_Planners@TechnipFMC.com",
 
-        "ENVIO de Ordem à EXPEDIÇÃO - Planejamento de Materiais MANUFATURA - ORDEM: " & ordem_clp.ordem & " - TR: " & ordem_clp.tr,
+        "REENVIO de Ordem à EXPEDIÇÃO - APP PLANEJAMENTO MANUFATURA - ORDEM: " & ordem_clp.ordem & " - TR: " & ordem_clp.tr,
 
         "<html>
         <head>
@@ -175,7 +211,7 @@ Navigate(tela_clp)
     </head>
         <body>
 
-        <h2>A seguinte ordem foi <strong>ENVIADA</strong> à EXPEDIÇÃO para tratamento no aplicativo de Solicitação de Materiais da Manufatura:</h2>
+        <h2>A seguinte ordem foi <strong>REENVIADA</strong> à EXPEDIÇÃO para tratamento no aplicativo MANUFATURA - Solicitação de Materiais:</h2>
 
         <table>
             <thead>
