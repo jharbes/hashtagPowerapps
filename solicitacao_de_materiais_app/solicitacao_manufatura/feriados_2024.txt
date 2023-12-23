@@ -1,9 +1,10 @@
 Feriados:
 
 1º de janeiro: Confraternização Universal (segunda-feira)
-29 de março: Sexta-feira Santa (sexta-feira)
+29 de março: Sexta-feira Santa / Paixão de Cristo (sexta-feira)
 *21 de abril: Tiradentes (domingo)
 1º de maio: Dia do Trabalho (quarta-feira)
+30 de maio : Corpus Christi (ponto facultativo nacional) (quinta-feira)
 *7 de setembro: Independência do Brasil (sábado)
 *12 de outubro: Dia de Nossa Sra. Aparecida (sábado)
 *2 de novembro: Finados (sábado)
@@ -19,3 +20,11 @@ Pontos facultativos:
 14 de fevereiro: Quarta-feira de Cinzas (quarta-feira)
 30 de maio: Corpus Christi (quinta-feira)
 28 de outubro: Dia do Servidor Público (segunda-feira)
+
+
+
+Rio de Janeiro:
+
+20 de janeiro (sábado): Dia de São Sebastião (feriado municipal na capital)
+23 de abril (terça-feira): Dia de São Jorge (feriado estadual)
+20 de novembro (quarta-feira): Dia da Consciência Negra (feriado estadual)
