@@ -60,11 +60,12 @@ Set(segunda_de_carnaval, DateAdd(varDataPascoa, -48, TimeUnit.Days));
 // Calcula a Terça-feira de Carnaval
 Set(terca_de_carnaval, DateAdd(varDataPascoa, -47, TimeUnit.Days));
 
+
 // Adiciona a Sexta Feira Santa à coleção
 Collect(
     lista_feriados,
     {
-        DataFeriado: sexta_feira_santa
+        data_feriado: sexta_feira_santa
     }
 );
 
@@ -72,7 +73,7 @@ Collect(
 Collect(
     lista_feriados,
     {
-        DataFeriado: segunda_de_carnaval
+        data_feriado: segunda_de_carnaval
     }
 );
 
@@ -80,7 +81,7 @@ Collect(
 Collect(
     lista_feriados,
     {
-        DataFeriado: terca_de_carnaval
+        data_feriado: terca_de_carnaval
     }
 );
 
