@@ -1,0 +1,25 @@
+// Criação de lista de feriados para acerto de horas referente ao tempo que cada ordem passou em um setor
+// Não contabilizar as horas dos dias de feriado
+ClearCollect(
+    lista_feriados,
+    ForAll(
+        'msm_app-lista_feriados',
+        {
+            data_feriado: DateValue(Text(Year(Now())) & "/" & Text(Month(data_feriado)) & "/" & Text(Day(data_feriado)), "yyyy/MM/dd")
+        }
+    )
+);
+
+
+Set(
+    numero_feriados,
+    CountRows(
+        Filter(
+            lista_feriados,
+            data_feriado >= ordem3.data_clp,
+            data_feriado <= Now(),
+            Weekday(data_feriado) <> 1, // Domingo
+            Weekday(data_feriado) <> 7  // Sábado
+        )
+    )
+);
