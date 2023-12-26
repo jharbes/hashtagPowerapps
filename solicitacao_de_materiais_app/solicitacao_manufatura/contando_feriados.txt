@@ -24,3 +24,39 @@ Set(
         )
     )
 );
+
+
+
+// Calculo da data da pascoa
+
+// Define a variável para o ano atual
+Set(varAno, Year(Now()));
+
+// Calcula a data da Páscoa
+Set(varA, Mod(varAno, 19));
+Set(varB, RoundDown(varAno / 100, 0));
+Set(varC, Mod(varAno, 100));
+Set(varD, RoundDown(varB / 4, 0));
+Set(varE, Mod(varB, 4));
+Set(varF, RoundDown((varB + 8) / 25, 0));
+Set(varG, RoundDown((varB - varF + 1) / 3, 0));
+Set(varH, Mod(19 * varA + varB - varD - varG + 15, 30));
+Set(varI, RoundDown(varC / 4, 0));
+Set(varK, Mod(varC, 4));
+Set(varL, Mod(32 + 2 * varE + 2 * varI - varH - varK, 7));
+Set(varM, RoundDown((varA + 11 * varH + 22 * varL) / 451, 0));
+Set(varMes, RoundDown((varH + varL - 7 * varM + 114) / 31, 0));
+Set(varDia, 1 + Mod(varH + varL - 7 * varM + 114, 31));
+
+// Combina o mês e o dia para formar a data da Páscoa
+Set(varDataPascoa, Date(varAno, varMes, varDia));
+
+// Calcula sexta-feira santa com base na data da pascoa
+Set(sexta_feira_santa, DateAdd(varDataPascoa, -2,TimeUnit.Days));
+
+// Calcula a Segunda-feira de Carnaval
+Set(segunda_de_carnaval, DateAdd(varDataPascoa, -48, TimeUnit.Days));
+
+// Calcula a Terça-feira de Carnaval
+Set(terca_de_carnaval, DateAdd(varDataPascoa, -47, TimeUnit.Days));
+
