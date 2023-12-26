@@ -11,6 +11,7 @@ ClearCollect(
 );
 
 
+// Contando o número de feriados entre a data de hoje e data de tratamento
 Set(
     numero_feriados,
     CountRows(
